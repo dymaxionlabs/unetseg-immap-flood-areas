@@ -1,4 +1,3 @@
-# immap-flood-areas
 
 # Identificación de áreas susceptibles a inundación.
 
