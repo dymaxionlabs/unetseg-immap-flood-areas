@@ -1,18 +1,18 @@
 
 # Identificación de áreas susceptibles a inundación.
 
-Las inundaciones constituyen uno de los desastres naturales más frecuentes en varias regiones de Colombia, siendo las poblaciones de asentamientos informales particularmente vulnerables frente a estos eventos producto de la mala calidad de las construcciones y la falta de infraestructura para prevenir inundaciones. 
+Las inundaciones constituyen uno de los desastres naturales más frecuentes en varias regiones de Colombia, siendo las poblaciones de asentamientos informales particularmente vulnerables frente a estos eventos producto de la mala calidad de las construcciones y la falta de infraestructura para prevenirlas. 
 
-El objetivo de este proyecto es desarrollar un modelo de susceptibilidad a inundaciones, que contribuirán a la generación de información que permita una gestión basada en datos de la crisis humanitaria que se vive en Colombia. 
+El desarrollo de este modelo de susceptibilidad a inundaciones, contribuirá a la generación de información que permita una gestión basada en datos de la crisis humanitaria que se vive en Colombia. 
 
 Como datos iniciales de entrada, el modelo de susceptibilidad a inundación utiliza:
 (I) un dataset de datos raster provenientes de satélites ópticos y de radar que representan los factores condicionantes (topográficos, ambientales, antrópicos) que pueden propiciar la ocurrencia de inundaciones,
 (II) información georeferenciada en formato vectorial (anotaciones) de áreas donde hayan ocurrido eventos pasados de inundación a lo largo de toda la zona de interés.
 
-Los factores condicionantes para la ocurrencia de inundaciones utilizados son altitud, pendiente, Índice Topográfico de Humedad (TWI, por sus siglas en inglés), Cobertura y Uso de suelo (LULC, por sus siglas en inglés), distancia a rios y distancia a calles.
-La selección de los factores condicionantes para el desarrollo del modelo de susceptibilidad a inundaciones estuvo basado principalmente en las características del área de estudio y la disponibilidad de los datos para dicha área. 
+Los factores condicionantes para la ocurrencia de inundaciones utilizados son la altitud, pendiente, Índice Topográfico de Humedad (TWI, por sus siglas en inglés), Cobertura y Uso de suelo (LULC, por sus siglas en inglés), distancia a rios y distancia a calles.
+La selección de estos factores condicionantes para el desarrollo del modelo, estuvo basado principalmente en las características del área de estudio y la disponibilidad de los datos para dicha área. 
 
-Debido a la extensión del área de estudio (aproximadamente 649792 km2) y el gran tamaño de los polígonos de inundación utilizados como anotaciones, todos los factores condicionantes fueron reescalados a una resolución espacial de 500 m de manera de eficientizar la performance del modelo U-Net. 
+Debido a la extensión del área de estudio y el gran tamaño de los polígonos de inundación utilizados como anotaciones, todos los factores condicionantes fueron reescalados a una resolución espacial de 500 m de manera de eficientizar la performance del modelo U-Net. 
 
 
 ## Requerimientos
