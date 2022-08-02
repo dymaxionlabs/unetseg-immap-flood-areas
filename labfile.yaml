@@ -1,0 +1,13 @@
+version: '0.3'
+project:
+  name: immap-flood-areas
+  projectid: n3lf9gkyia
+workflows:
+  a_workflow_example:
+    alias: a_workflow_example
+    nbtask:
+      nb_name: welcome
+      params:
+        TIMEOUT: 5
+      description: An example of how to configure a specific workflow
+    enabled: false
