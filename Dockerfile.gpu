@@ -1,0 +1,63 @@
+## This image comes from the last build of nb_workflows client
+## Then, some steps are ommited in the second step
+## In the future a script should be added to handle edges cases
+FROM nuxion/labfunctions:0.9.0-alpha.14-client-cuda11.5 as builder
+ENV DEBIAN_FRONTEND=noninteractive
+USER root
+SHELL ["/bin/bash", "-c"]
+ADD requirements.txt /tmp
+# add root/local/bin to path to suppress pip warning
+ENV PATH=$PATH:/root/.local/bin
+ENV DEBIAN_FRONTEND=noninteractive
+## For the GPU version, part of the code is based on the official image for tensorflow:
+## https://hub.docker.com/layers/tensorflow/tensorflow/tensorflow/latest-gpu-jupyter/images/sha256-56677a6a426e87cba3dc5ae8eb82cffb6c76af7dd3683fe9caaba28dcd2a8958?context=explore
+ENV CUDA=11.5
+ENV CUDNN=8.4.0.27-1+cuda11.6
+ENV CUDNN_MAJOR_VERSION=8
+# Nvidia performs unplanned gpg keys udpates see
+# https://forums.developer.nvidia.com/t/gpg-error-http-developer-download-nvidia-com-compute-cuda-repos-ubuntu1804-x86-64/212904/6
+RUN apt-key adv --fetch-keys  http://developer.download.nvidia.com/compute/cuda/repos/2004/x86_64/3bf863cc.pub \
+    && apt-get -y update
+
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+   build-essential gdal-bin git libgdal-dev libopenblas-dev python3 python3-dev python3-gdal python3-pip file \
+   && pip install --user -r /tmp/requirements.txt
+# Final image
+FROM nuxion/labfunctions:0.9.0-alpha.14-client-cuda11.5 as app
+USER root
+SHELL ["/bin/bash", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV CUDA=11.5
+ENV CUDNN=8.4.0.27-1+cuda11.6
+ENV CUDNN_MAJOR_VERSION=8
+RUN apt-key adv --fetch-keys \
+    && apt-get -y update
+
+
+# Install Google Cloud SDK
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | tee /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
+
+# Install Orfeo Toolbox
+ARG otb_version=8.0.1
+ENV OTB_PACKAGE_NAME=OTB-${otb_version}-Linux64
+RUN wget -q https://www.orfeo-toolbox.org/packages/$OTB_PACKAGE_NAME.run \
+  && chmod +x ./$OTB_PACKAGE_NAME.run \
+  && mv ./$OTB_PACKAGE_NAME.run /opt/ \
+  && cd /opt/ \
+  && /opt/$OTB_PACKAGE_NAME.run \
+  && rm -f /opt/$OTB_PACKAGE_NAME.run \
+  && ln -s /opt/$OTB_PACKAGE_NAME /opt/OTB
+ENV OTBENV_PROFILE_PATH=/opt/OTB/otbenv.profile
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+   curl gdal-bin libgl1 python3 python3-gdal python3-pip
+
+COPY --from=builder --chown=app:app /root/.local /home/app/.local/
+COPY --chown=app:app . /app
+USER app
+WORKDIR /app
+ENV PATH=$PATH:/home/app/.local/bin
+ENV PYTHONPATH=/app
+CMD ["nb"]
