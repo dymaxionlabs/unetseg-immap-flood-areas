@@ -14,6 +14,7 @@ La selección de estos factores condicionantes para el desarrollo del modelo, es
 
 Debido a la extensión del área de estudio y el gran tamaño de los polígonos de inundación utilizados como anotaciones, todos los factores condicionantes fueron reescalados a una resolución espacial de 500 m de manera de eficientizar la performance del modelo U-Net. 
 
+![](prediccion.jpg)
 
 ## Requerimientos
 
